@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8" />
+	<script type="text/javascript" th:src="@{/jquery-3.1.1.min.js}"></script>
+	<title>hello</title>
+	<script type="text/javascript">
+		$(function(){
+			//Gif验证码
+			$("#Imga").click(function(){
+	            var path = "/gifCaptcha?" + new Date().getTime();
+	            //中间将src置空是为了解决火狐浏览器点击两下后变为静态显示问题
+	            $("#captcha").attr("src", "").attr("src", path);
+			});
+		})
+    </script>
+</head>
+<body>
+
+	<h1 th:text="${hello}">Hello World</h1>
+	
+	Gif 动态验证码：
+	<br />
+	<a href="javascript:void(0);" id="Imga">
+	    <img id="captcha" src="/gifCaptcha" alt="验证码"/>
+	</a>
+
+</body>
+</html>
