@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import springboot.controller.NoViewController;
+import springboot.controller.MyRestController;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,7 +24,7 @@ public class SpringbootApplicationTests {
 
 	@Before
 	public void setUp() {
-		mvc = MockMvcBuilders.standaloneSetup(new NoViewController()).build();
+		mvc = MockMvcBuilders.standaloneSetup(new MyRestController()).build();
 	}
 
 	@Test
