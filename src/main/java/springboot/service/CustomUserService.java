@@ -14,11 +14,11 @@ public class CustomUserService implements UserDetailsService {
 	private static final Logger logger = Logger.getLogger(CustomUserService.class);
 	
 	@Autowired
-	SysUserRepository userRepository;
+	SysUserRepository sysUserRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		SysUser user = userRepository.findByUsername(username);
+		SysUser user = sysUserRepository.findByUsername(username);
 		if(user == null){
 			throw new UsernameNotFoundException("用户名不存在");
 		}

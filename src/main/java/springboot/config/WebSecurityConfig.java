@@ -31,6 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
         	.authorizeRequests()
 		        .antMatchers("/gifCaptcha").permitAll()
+		        .antMatchers("/api/**").permitAll()
         		.anyRequest().authenticated()
         		.and()
         	.formLogin()
@@ -40,6 +41,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         			.and()
         	.logout()
         		.permitAll();
+        
+        //关闭跨站请求伪造保护
+        http.csrf().disable();
 	}
     
 

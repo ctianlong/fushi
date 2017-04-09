@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import springboot.rest.HelloResource;
+import springboot.rest.SysUserResource;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,7 +24,7 @@ public class SpringbootApplicationTests {
 
 	@Before
 	public void setUp() {
-		mvc = MockMvcBuilders.standaloneSetup(new HelloResource()).build();
+		mvc = MockMvcBuilders.standaloneSetup(new SysUserResource()).build();
 	}
 
 	@Test
