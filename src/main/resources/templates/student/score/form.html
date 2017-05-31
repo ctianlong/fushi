@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>考生复试成绩管理</title>
+    <div th:replace="head"></div>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper">
+
+    <div th:replace="header"></div>
+    <div th:replace="sidebar"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>考生复试成绩管理<small>V1.0</small></h1>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Horizontal Form -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><span th:text="修改成绩"></span></h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form class="form-horizontal" th:action="@{${api}}" method="post" th:object="${student}" onsubmit="return confirmSubmit()">
+                            <div class="box-body">
+                            
+                            	<div class="form-group">
+                                    <label class="col-sm-2 control-label">组号</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" th:value="*{groupNo}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">姓名</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" th:value="*{fullname}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="inputProClaScore" class="col-sm-2 control-label">专业课笔试</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" name="proClaScore" th:value="*{proClaScore}"
+                                               class="form-control" id="inputProClaScore" placeholder="(0-100)" min="0" max="100"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEngWirScore" class="col-sm-2 control-label">英语笔试</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" name="engWirScore" th:value="*{engWirScore}"
+                                               class="form-control" id="inputEngWirScore" placeholder="(0-50)" min="0" max="50"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEngSpeScore" class="col-sm-2 control-label">英语口语</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" name="engSpeScore" th:value="*{engSpeScore}"
+                                               class="form-control" id="inputEngSpeScore" placeholder="(0-50)" min="0" max="50"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">本科成绩及科研业绩</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" th:value="*{compInteSco1}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">专业基础能力</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" th:value="*{compInteSco2}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">培养潜力</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" th:value="*{compInteSco3}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">分析和语言能力</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" th:value="*{compInteSco4}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">综合素质</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" th:value="*{compInteSco5}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">合计</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" th:value="*{compInteTotScore}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">原始总分</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" th:value="*{oriTotScore}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">折算总分</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" th:value="*{lasTotScore}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                            	<div class="form-group">
+								    <div class="col-sm-offset-2 col-sm-2">
+		                              <button type="submit" class="btn btn-info">保存</button>
+		                              <button type="button" class="btn btn-default" onclick="javascript:history.go(-1);">返回</button>
+								    </div>
+								</div>
+                            </div>
+                            <!-- /.box-footer -->
+                        </form>
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+            </div>
+            <!-- /.row -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <div th:replace="footer"></div>
+</div>
+<!-- ./wrapper -->
+<div th:replace="script"></div>
+
+</body>
+</html>

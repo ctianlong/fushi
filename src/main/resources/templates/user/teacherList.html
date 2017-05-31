@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <div th:replace="head"></div>
+    <title>综合面试教师管理</title>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper">
+
+    <div th:replace="header"></div>
+    <div th:replace="sidebar"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    
+        <section class="content-header">
+            <h1>综合面试教师管理<small>V1.0</small></h1>
+        </section>
+    
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                        	<h3 class="box-title">教师列表</h3>
+                        	<!-- 
+                        	<div class="box-tools pull-right">
+                        	   <a th:href="@{/}">
+	                        	<button type="button" class="btn btn-warning btn-sm">
+	                            	<span class="glyphicon glyphicon-plus"></span>&nbsp;备用
+	                            </button>
+                        	   </a>
+                            </div>--><!-- /.box-tools -->
+                        	 
+                        </div>
+
+                        <div class="box-body">
+                            <table id="dataTable" class="table table-bordered table-striped table-hover">
+                                <thead>
+                                <tr>
+                                	<th>用户名</th>
+                                    <th>姓名</th>
+                                    <th>组号</th>
+                                    <th>同意状态</th>
+                                    <th>提交状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item:${list}">
+                                    <td th:text="${item.username}"></td>
+                                    <td th:text="${item.fullname}"></td>
+                                    <td th:text="${item.groupNo}"></td>
+                                    <td th:text="${item.agreed}"></td>
+                                    <td th:text="${item.submitted}"></td>
+                                    <td>
+                                        <button th:onclick="|editGroupNo(${item.id},${item.username},'${item.fullname}',${item.groupNo})|" type="button" class="btn btn-primary btn-xs">
+							                <span class="glyphicon glyphicon-th"></span>&nbsp;分组
+							            </button>
+                                        <!-- 
+                                        <button type="button" name="trash" th:data="@{/}" class="btn btn-danger btn-xs">
+                                        	<span class="glyphicon glyphicon-trash"></span>&nbsp;强制提交
+                                        </button>
+                                         -->
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            
+            
+            
+            <!-- 分组modal -->
+	        <div class="modal fade" data-backdrop="static" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	          <div class="modal-dialog" role="document">
+	            <div class="modal-content" style="border-radius:5px;">
+	              <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                  <span aria-hidden="true">&times;</span></button>
+	                <h4 class="modal-title" id="myModalLabel">分组修改</h4>
+	              </div>
+                  <form id="groupNoForm" class="form-horizontal">
+	              <div class="modal-body">
+	                <div class="row">
+                        <div class="col-md-12">
+                                <input type="hidden" name="id"/>
+				                <div class="form-group">
+				                    <label class="col-md-3 control-label">用户名：</label>
+				                    <div class="col-md-3">
+				                        <p class="form-control-static" id="username"></p>
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <label class="col-md-3 control-label">姓名：</label>
+				                    <div class="col-md-3">
+				                        <p class="form-control-static" id="fullname"></p>
+				                    </div>
+				                </div>
+				                <div class="form-group">
+				                    <label for="groupNoInput" class="col-md-3 control-label">请输入组号：</label>
+				                    <div class="col-md-3">
+				                    <input type="number" name="groupNo" class="form-control" id="groupNoInput" placeholder="组号" min="1" max="100"/>
+				                    </div>
+				                </div>
+                        </div>
+                    </div>
+	              </div>
+	              <div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+	                <button type="submit" class="btn btn-primary">保存</button>
+	              </div>
+                  </form>
+	            </div>
+	            <!-- /.modal-content -->
+	          </div>
+	          <!-- /.modal-dialog -->
+	        </div>
+	        <!-- /.modal -->
+		    
+            
+            
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    
+    <div th:replace="footer"></div>
+
+</div>
+
+<div th:replace="script"></div>
+
+<!-- page script -->
+<script>
+    $(function () {
+        $('#dataTable').DataTable({
+        	"paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "scrollX": true,
+            "columnDefs": [
+                { "orderable": false, "targets": 5 },
+                { "targets": 3, "render": function(data, type, row, meta) {
+                	return renderFlag(data);
+                }},
+                { "targets": 4, "render": function(data, type, row, meta) {
+                    return renderFlag(data);
+                }}
+            ],
+            "language": {
+                "url": "/i18n/dataTables/zh_CN.json"
+            }
+        });
+        
+        
+        $("#groupNoForm").submit(function(){
+        	var id = $(":hidden[name=id]").val();
+        	var groupNo = $("#groupNoInput").val();
+        	var url = "/users/teachers/"+ id +"/changeGroupNo";
+            $.ajax({
+                url:url,
+                type:"POST",
+                contentType:"application/json; charset=utf-8",
+                data: JSON.stringify({"groupNo":groupNo}),
+                success:function (data, textStatus, jqXHR) {
+                    alert("修改成功！");
+                    window.location.reload();
+                },
+                error:function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("修改失败！");
+                }
+            });
+        	return false;
+        });
+        
+        
+        ajaxClick('trash','DELETE','删除','(将)');
+    });
+    
+    function renderFlag(flag) {
+    	var node = "";
+    	if (flag == "true") {
+    		node = '<span class="glyphicon glyphicon-ok" style="color:#00a65a;"></span>';
+    	} else if(flag == "false") {
+    		node = '<span class="glyphicon glyphicon-remove" style="color:#f56954;"></span>';
+    	}
+    	return node;
+    }
+    
+    function editGroupNo(id, username, fullname, groupNo) {
+    	$(":hidden[name=id]").val(id);
+    	$("#username").text(username); 
+    	$("#fullname").text(fullname);
+    	$("#groupNoInput").val(groupNo);
+    	$("#modal-default").modal("show");
+    }
+</script>
+</body>
+</html>

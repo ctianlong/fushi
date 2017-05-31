@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>考生基本信息管理</title>
+    <div th:replace="head"></div>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper">
+
+    <div th:replace="header"></div>
+    <div th:replace="sidebar"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    
+        <section class="content-header">
+            <h1>考生基本信息管理<small>V1.0</small></h1>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Horizontal Form -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><span th:text="(${api} eq '/students/info/add')?'添加考生':'修改基本信息'"></span></h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form class="form-horizontal" th:action="@{${api}}" method="post" onsubmit="return confirmSubmit()">
+                            <div class="box-body">
+
+                                <div class="form-group">
+                                    <label for="inputFullname" class="col-sm-2 control-label">姓名</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" name="fullname" th:value="${student}?${student.fullname}"
+                                               class="form-control" id="inputFullname" placeholder="必填"
+                                               required="required" minlength="1" maxlength="50"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="inputGroupNo" class="col-sm-2 control-label">组号</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" name="groupNo" th:value="${student}?${student.groupNo}"
+                                               class="form-control" id="inputGroupNo" placeholder="选填 (1-100)" min="1" max="100"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="inputGraduatedCollege" class="col-sm-2 control-label">本科院校</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" name="graduatedCollege" th:value="${student}?${student.graduatedCollege}"
+                                               class="form-control" id="inputGraduatedCollege" placeholder="选填" minlength="1" maxlength="20"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputFirstTutor" class="col-sm-2 control-label">第一导师</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" name="firstTutor" th:value="${student}?${student.firstTutor}"
+                                               class="form-control" id="inputFirstTutor" placeholder="选填" minlength="1" maxlength="10"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputSecondTutor" class="col-sm-2 control-label">第二导师</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" name="secondTutor" th:value="${student}?${student.secondTutor}"
+                                               class="form-control" id="inputSecondTutor" placeholder="选填" minlength="1" maxlength="10"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputTelephone" class="col-sm-2 control-label">联系方式</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" name="telephone" th:value="${student}?${student.telephone}"
+                                               class="form-control" id="inputTelephone" placeholder="选填" minlength="1" maxlength="20"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputHomeAddress" class="col-sm-2 control-label">家庭住址</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" name="homeAddress" th:value="${student}? ${student.homeAddress}"
+                                               class="form-control" id="inputHomeAddress" placeholder="选填" minlength="1" maxlength="50"/>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                            	<div class="form-group">
+								    <div class="col-sm-offset-2 col-sm-2">
+		                              <button type="submit" class="btn btn-info">保存</button>
+		                              <button type="button" class="btn btn-default" onclick="javascript:history.go(-1);">返回</button>
+								    </div>
+								</div>
+                            </div>
+                            <!-- /.box-footer -->
+                        </form>
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+            </div>
+            <!-- /.row -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <div th:replace="footer"></div>
+</div>
+<!-- ./wrapper -->
+<div th:replace="script"></div>
+
+</body>
+</html>

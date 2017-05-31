@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <div th:replace="head"></div>
+    <title>综合面试成绩录入</title>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper">
+
+    <div th:replace="header"></div>
+    <div th:replace="sidebar"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    
+         <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>专业综合成绩管理<small>V1.0</small></h1>
+        </section>
+    
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                        	<h3 class="box-title">考生列表</h3>
+                        	<div class="box-tools pull-right">
+	                            <button sec:authorize="principal.submitted == false" type="button" name="finalSubmit" th:data="@{/users/teacher/submit}" class="btn btn-success btn-sm">
+	                                <span class="glyphicon glyphicon-ok"></span>&nbsp;提交
+	                            </button>
+	                            <button sec:authorize="principal.submitted == true" type="button" class="btn btn-success btn-sm" disabled="disabled">
+	                               <span class="glyphicon glyphicon-ok"></span>&nbsp;已提交，如需修改，请联系管理员
+	                            </button>
+                            </div><!-- /.box-tools -->
+                        </div>
+
+                        <div class="box-body">
+                            <table id="dataTable" class="table table-bordered table-striped table-hover">
+                                <thead>
+                                <tr>
+                                	<th>组号</th>
+                                    <th>姓名</th>
+                                    <th>本科成绩及科研业绩</th>
+                                    <th>专业基础能力</th>
+                                    <th>培养潜力</th>
+                                    <th>分析和语言能力</th>
+                                    <th>综合素质</th>
+                                    <th>合计</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item:${list}">
+                                	<td th:text="${item.student.groupNo}"></td>
+                                    <td th:text="${item.student.fullname}"></td>
+                                    <td th:text="${item.compInteSco1}"></td>
+                                    <td th:text="${item.compInteSco2}"></td>
+                                    <td th:text="${item.compInteSco3}"></td>
+                                    <td th:text="${item.compInteSco4}"></td>
+                                    <td th:text="${item.compInteSco5}"></td>
+                                    <td th:text="${item.compInteScoSum}"></td>
+                                    <td sec:authorize="principal.submitted == true"></td>
+                                    <td sec:authorize="principal.submitted == false">
+                                        <a class="btn btn-primary btn-xs" th:href="@{/teacher/comp-inte-sco-items/{id}/form(id=${item.id})}">
+		                                    <span class="glyphicon glyphicon-edit"></span>&nbsp;编辑
+                                        </a>
+                                        <button type="button" name="reset" th:data="@{/teacher/comp-inte-sco-items/{id}/reset(id=${item.id})}" class="btn btn-danger btn-xs">
+                                        	<span class="glyphicon glyphicon-remove"></span>&nbsp;重置
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    
+    <div th:replace="footer"></div>
+
+</div>
+
+<div th:replace="script"></div>
+
+<!-- page script -->
+<script>
+    $(function () {
+        $('#dataTable').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "scrollX": true,
+            "columnDefs": [
+                { "orderable": false, "targets": [8] }
+            ],
+            "language": {
+                "url": "/i18n/dataTables/zh_CN.json"
+            }
+        });
+        
+        ajaxClick('reset','PUT','重置','(将该同学所有成绩置为空)');
+        ajaxClick('finalSubmit','POST','提交最终成绩','(提交后将无法修改成绩)');
+    });
+    
+</script>
+</body>
+</html>

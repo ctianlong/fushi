@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <div th:replace="head"></div>
+    <title>用户基本信息管理</title>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper">
+
+    <div th:replace="header"></div>
+    <div th:replace="sidebar"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    
+        <section class="content-header">
+            <h1>用户基本信息管理<small>V1.0</small></h1>
+        </section>
+    
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                        	<h3 class="box-title">用户列表</h3>
+                        	<div class="box-tools pull-right">
+                        	   <a th:href="@{/users/form}">
+	                        	<button type="button" class="btn btn-warning btn-sm">
+	                            	<span class="glyphicon glyphicon-plus"></span>&nbsp;添加
+	                            </button>
+                        	   </a>
+                            </div><!-- /.box-tools -->
+                        </div>
+
+                        <div class="box-body">
+                            <table id="dataTable" class="table table-bordered table-striped table-hover">
+                                <thead>
+                                <tr>
+                                	<th>用户名</th>
+                                    <th>姓名</th>
+                                    <th>角色</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item:${list}">
+                                    <td th:text="${item.username}"></td>
+                                    <td th:text="${item.fullname}"></td>
+                                    <td>
+                                   		<span th:each="ritem:${item.roles}" class="btn bg-olive btn-xs" style="cursor:text;">
+                                   			<b th:text="${ritem.nameZh}"></b>
+                           				</span>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{/users/{id}/form(id=${item.id})}" class="btn btn-primary btn-xs">
+                                            <span class="glyphicon glyphicon-edit"></span>&nbsp;编辑
+                                        </a>
+                                        <button type="button" name="trash" th:data="@{/users/{id}/delete(id=${item.id})}" class="btn btn-danger btn-xs">
+                                        	<span class="glyphicon glyphicon-trash"></span>&nbsp;删除
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    
+    <div th:replace="footer"></div>
+
+</div>
+
+<div th:replace="script"></div>
+
+<!-- page script -->
+<script>
+    $(function () {
+        $('#dataTable').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "scrollX": true,
+            "columnDefs": [
+                { "orderable": false, "targets": [3] }
+            ],
+            "language": {
+                "url": "/i18n/dataTables/zh_CN.json"
+            }
+        });
+        
+        ajaxClick('trash','DELETE','删除','(将删除老师的所有打分)');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>用户基本信息管理</title>
+    <div th:replace="head"></div>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper">
+
+    <div th:replace="header"></div>
+    <div th:replace="sidebar"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    
+        <section class="content-header">
+            <h1>用户基本信息管理<small>V1.0</small></h1>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Horizontal Form -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><span th:text="(${api} eq '/users/add')?'添加用户':'修改用户基本信息'"></span></h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <!-- form start -->
+                        <form class="form-horizontal" th:action="@{${api}}" method="post" onsubmit="return confirmSubmit()">
+                            <div class="box-body">
+
+                                <div class="form-group">
+                                    <label for="inputUsername" class="col-sm-2 control-label">用户名</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" name="username" th:value="${user}?${user.username}"
+                                               class="form-control" id="inputUsername" placeholder="必填"
+                                               required="required" minlength="1" maxlength="50"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="inputFullname" class="col-sm-2 control-label">姓名</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" name="fullname" th:value="${user}?${user.fullname}"
+                                               class="form-control" id="inputFullname" placeholder="必填"
+                                               required="required" minlength="1" maxlength="50"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">角色分配</label>
+                                    <div class="col-sm-2">
+	                                    <div th:each="item:${roleList}" class="checkbox">
+						                      <input type="checkbox" th:checked="${user eq null} ? false : ${#sets.contains(user.roles, item)}" th:name="rname" th:value="${item.name}"/>
+						                      <button type="button" class="btn bg-olive btn-xs" style="cursor:text;">
+		                                   		<b th:text="${item.nameZh}"></b>
+		                           			  </button>
+						                </div>
+                                    </div>
+                                </div>
+
+                                <!--  th:id="${item eq roleWithGroup}?'groupcheckbox'"
+                                <div class="form-group" name="groupNoDiv" th:hidden="${user}?(${#sets.contains(user.roles, roleWithGroup)}?'false':'true'):'true'">
+                                    <label for="inputGroupNo" class="col-sm-2 control-label">组号</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" name="groupNo" th:value="${user}?${user.groupNo}" th:disabled="${user}?(${#sets.contains(user.roles, roleWithGroup)}?'false':'true'):'true'"
+                                         class="form-control" id="inputGroupNo" placeholder="选填 (1-100)" min="1" max="100"/>
+                                    </div>
+                                </div>
+                                 -->
+                                
+                               
+                                
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                            	<div class="form-group">
+								    <div class="col-sm-offset-2 col-sm-2">
+		                              <button type="submit" class="btn btn-info">保存</button>
+		                              <button type="button" class="btn btn-default" onclick="javascript:history.go(-1);">返回</button>
+								    </div>
+								</div>
+                            </div>
+                            <!-- /.box-footer -->
+                        </form>
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+            </div>
+            <!-- /.row -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <div th:replace="footer"></div>
+</div>
+<!-- ./wrapper -->
+<div th:replace="script"></div>
+
+<script type="text/javascript">
+
+	$(function(){
+		/**
+		var groupcb = $("#groupcheckbox");
+		var groupNoDiv = $("div[name='groupNoDiv']");
+		var groupNoInput = $("input[name='groupNo']");
+		groupcb.on("ifChecked", function(){
+			groupNoDiv.show();
+			groupNoInput.removeAttr("disabled");
+		});
+		groupcb.on("ifUnchecked", function(){
+			groupNoInput.attr("disabled","disabled");
+			groupNoDiv.hide();
+		});
+		**/
+	});
+
+</script>
+
+</body>
+</html>

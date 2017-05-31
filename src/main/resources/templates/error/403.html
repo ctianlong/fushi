@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title>无权访问</title>
+<div th:replace="head"></div>
+</head>
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="hold-transition skin-blue layout-top-nav">
+	<div class="wrapper">
+		<!-- Full Width Column -->
+		<div class="content-wrapper">
+			<div class="container">
+				<br /> <br /> <br /> <br /> <br /> <br />
+				<section class="content">
+					<div class="error-page">
+						<h2 class="headline text-yellow">403</h2>
+							<br />
+						<div class="error-content">
+							<h3>
+								<i class="fa fa-warning text-yellow"></i> 糟糕！未授权。
+							</h3>
+							<br />
+							<p>
+								您没有权限访问当前页面。试一试回到 <a href="/">首页</a>。
+							</p>
+						</div>
+						<!-- /.error-content -->
+					</div>
+					<!-- /.error-page -->
+				</section>
+				<!-- /.content -->
+			</div>
+			<!-- /.container -->
+		</div>
+		<!-- /.content-wrapper -->
+		<div th:replace="footer"></div>
+	</div>
+	<!-- ./wrapper -->
+	<div th:replace="script"></div>
+</body>
+</html>

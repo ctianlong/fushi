@@ -1,0 +1,64 @@
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+        
+            <li class="treeview">
+                <a th:href="@{/}">
+                    <i class="fa fa-home"></i><span>首页</span>
+                </a>
+            </li>
+        
+        	<li sec:authorize="hasRole(T(springboot.security.RoleConstants).USER) and principal.agreed == true" class="treeview">
+        		<a th:href="@{/teacher/comp-inte-sco-items}">
+        			<i class="fa fa-edit"></i><span>专业综合成绩评分</span>
+        		</a>
+        	</li>
+        	
+        	<li sec:authorize="hasRole(T(springboot.security.RoleConstants).ADMIN)" class="treeview">
+        	   <a href="#">
+                   <i class="fa fa-user"></i> <span>考生管理</span>
+                   <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+               </a>
+               <ul class="treeview-menu">
+                <li><a th:href="@{/students/info}"><i class="fa fa-circle-o"></i><span>考生基本信息管理</span></a></li>
+                <li><a th:href="@{/students/score}"><i class="fa fa-circle-o"></i><span>考生复试成绩管理</span></a></li>
+               </ul>
+        	</li>
+        	<li sec:authorize="hasRole(T(springboot.security.RoleConstants).ADMIN)" class="treeview">
+        	   <a href="#">
+        	       <i class="fa fa-user"></i> <span>用户管理</span>
+		           <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+        	   </a>
+        	   <ul class="treeview-menu">
+	        	<li><a th:href="@{/users}"><i class="fa fa-circle-o"></i><span>用户基本信息管理</span></a></li>
+	        	<li><a th:href="@{/users/teachers}"><i class="fa fa-circle-o"></i><span>综合面试教师管理</span></a></li>
+        	   </ul>
+        	</li>
+        	
+            <!--Multilevel-->
+            <!-- 
+            <li th:if="${not #lists.isEmpty(navs)}" class="treeview active" th:each="nav:${navs}">
+                <a th:href="@{${nav.url}?:'#'}">
+                    <span th:text="${nav.label}">label</span>
+                    <span class="pull-right-container">
+		              <i class="fa fa-angle-left pull-right"></i>
+		            </span>
+                </a>
+                <ul class="treeview-menu" th:each="second:${nav.childNodes}">
+                    <li th:name="${second.id}" th:data="${currentMenu}" th:class="(${second.id}==${currentMenu})?'active':''">
+                    	<a href="#" th:href="@{${second.url}}">
+	                    	<i class="fa fa-circle-o"></i>
+	                    	<span th:text="${second.label}">label</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+             -->
+
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

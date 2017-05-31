@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <div th:replace="head"></div>
+    <title>考生复试成绩管理</title>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper">
+
+    <div th:replace="header"></div>
+    <div th:replace="sidebar"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>考生复试成绩管理<small>V1.0</small>
+          </h1>
+        </section>
+    
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                        	<h3 class="box-title">考生列表</h3>
+                        	<div class="box-tools pull-right">
+	                            <button name="generateAll" th:data="@{/students/score/generateAll}" type="button" class="btn btn-success btn-sm">
+	                            	<span class="glyphicon glyphicon-play"></span>&nbsp;计算
+	                            </button>
+                            </div><!-- /.box-tools -->
+                        </div>
+
+                        <div class="box-body">
+                            <table id="dataTable" class="table table-bordered table-striped table-hover">
+                                <thead>
+                                <tr>
+                                	<th>组号</th>
+                                    <th>姓名</th>
+                                    <th>专业课笔试</th>
+                                    <th>英语笔试</th>
+                                    <th>英语口语</th>
+                                    <th>本科成绩及科研业绩</th>
+                                    <th>专业基础能力</th>
+                                    <th>培养潜力</th>
+                                    <th>分析和语言能力</th>
+                                    <th>综合素质</th>
+                                    <th>合计</th>
+                                    <th>原始总分</th>
+                                    <th>折算总分</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item:${stuList}">
+                                	<td th:text="${item.groupNo}"></td>
+                                    <td th:text="${item.fullname}"></td>
+                                    <td th:text="${item.proClaScore}"></td>
+                                    <td th:text="${item.engWirScore}"></td>
+                                    <td th:text="${item.engSpeScore}"></td>
+                                    <td th:text="${item.compInteSco1}"></td>
+                                    <td th:text="${item.compInteSco2}"></td>
+                                    <td th:text="${item.compInteSco3}"></td>
+                                    <td th:text="${item.compInteSco4}"></td>
+                                    <td th:text="${item.compInteSco5}"></td>
+                                    <td th:text="${item.compInteTotScore}"></td>
+                                    <td th:text="${item.oriTotScore}"></td>
+                                    <td th:text="${item.lasTotScore}"></td>
+                                    <td>
+                                        <a th:href="@{/students/score/{id}/detail(id=${item.id})}" class="btn btn-info btn-xs">
+                                            <span class="glyphicon glyphicon-list"></span>&nbsp;详情
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                        <!-- Loading (remove the following to stop the loading)-->
+			            <div class="overlay" style="display: none">
+				        	<i class="fa fa-refresh fa-spin"></i>
+			            </div>
+			            <!-- end loading -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    
+    <div th:replace="footer"></div>
+
+</div>
+
+<div th:replace="script"></div>
+
+<!-- page script -->
+<script>
+    $(function () {
+        $('#dataTable').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "scrollX": true,
+            "columnDefs": [
+                { "orderable": false, "targets": [13] }
+            ],
+            "language": {
+                "url": "/i18n/dataTables/zh_CN.json"
+            }
+        });
+        
+        $("button[name='generateAll']").click(function () {
+        	if(confirm("确认进行成绩计算？")){
+	            $.ajax({
+	                type:"post",
+	                url:$(this).attr("data"),
+	                beforeSend:function(){
+	                	$(".overlay").show();
+	                },
+	                success:function (data, textStatus, jqXHR) {
+	                	alert("计算完成！");
+	                    window.location.reload();
+	                },
+	                error:function (XMLHttpRequest, textStatus, errorThrown) {
+	                    alert("计算失败！");
+	                },
+	                complete:function(){
+	                	$(".overlay").remove();
+	                }
+	            })
+        	}
+        });
+        
+    });
+    
+</script>
+</body>
+</html>

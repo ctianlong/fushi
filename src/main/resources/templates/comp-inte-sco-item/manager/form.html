@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>考生复试成绩管理</title>
+    <div th:replace="head"></div>
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini ">
+<div class="wrapper">
+
+    <div th:replace="header"></div>
+    <div th:replace="sidebar"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>考生复试成绩管理<small>V1.0</small></h1>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Horizontal Form -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">修改专业综合成绩</h3>
+                        </div>
+                        <!-- /.box-header -->
+                                    
+                        <!-- form start -->
+                        <form class="form-horizontal" th:action="@{${api}}" method="post" th:object="${item}" onsubmit="return confirmSubmit()">
+                            <div class="box-body">
+
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">组号</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" th:value="*{student.groupNo}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">学生姓名</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" th:value="*{student.fullname}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">评分教师</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" th:value="*{teacher.fullname}" class="form-control" disabled="disabled"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="inputCompInteSco1" class="col-sm-2 control-label">本科成绩及科研业绩</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" name="compInteSco1" th:value="*{compInteSco1}" th:style="*{compInteSco1} eq null ? 'background-color: #ffdcdc;'"
+                                              required="required" class="form-control score-input" id="inputCompInteSco1" placeholder="请输入(0-30)" min="0" max="30"/>
+                                    </div>
+                                    <div class="col-sm-2"><span class="text-red score-error"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputCompInteSco2" class="col-sm-2 control-label">专业基础能力</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" name="compInteSco2" th:value="*{compInteSco2}" th:style="*{compInteSco2} eq null ? 'background-color: #ffdcdc;'"
+                                              required="required" class="form-control score-input" id="inputCompInteSco2" placeholder="请输入(0-30)" min="0" max="30"/>
+                                    </div>
+                                    <div class="col-sm-2"><span class="text-red score-error"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputCompInteSco3" class="col-sm-2 control-label">培养潜力</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" name="compInteSco3" th:value="*{compInteSco3}" th:style="*{compInteSco3} eq null ? 'background-color: #ffdcdc;'"
+                                              required="required" class="form-control score-input" id="inputCompInteSco3" placeholder="请输入(0-30)" min="0" max="30"/>
+                                    </div>
+                                    <div class="col-sm-2"><span class="text-red score-error"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputCompInteSco4" class="col-sm-2 control-label">分析和语言能力</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" name="compInteSco4" th:value="*{compInteSco4}" th:style="*{compInteSco4} eq null ? 'background-color: #ffdcdc;'"
+                                              required="required" class="form-control score-input" id="inputCompInteSco4" placeholder="请输入(0-30)" min="0" max="30"/>
+                                    </div>
+                                    <div class="col-sm-2"><span class="text-red score-error"></span></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputCompInteSco5" class="col-sm-2 control-label">综合素质</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" name="compInteSco5" th:value="*{compInteSco5}" th:style="*{compInteSco5} eq null ? 'background-color: #ffdcdc;'"
+                                              required="required" class="form-control score-input" id="inputCompInteSco5" placeholder="请输入(0-30)" min="0" max="30"/>
+                                    </div>
+                                    <div class="col-sm-2"><span class="text-red score-error"></span></div>
+                                </div>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label"><i class="fa fa-bell-o"></i> 当前合计</label>
+                                    <div class="col-sm-2">
+                                        <input readonly="readonly" type="number" name="compInteScoSum" th:value="*{compInteSco1?:0} + *{compInteSco2?:0} + *{compInteSco3?:0} + *{compInteSco4?:0} + *{compInteSco5?:0}" class="form-control" id="compInteScoSum"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                            	<div class="form-group">
+								    <div class="col-sm-offset-2 col-sm-2">
+		                              <button type="submit" class="btn btn-info">保存</button>
+		                              <button type="button" class="btn btn-default" onclick="javascript:history.go(-1);">返回</button>
+								    </div>
+								</div>
+                            </div>
+                            <!-- /.box-footer -->
+                        </form>
+                    </div>
+                    <!-- /.box -->
+
+                </div>
+            </div>
+            <!-- /.row -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <div th:replace="footer"></div>
+</div>
+<!-- ./wrapper -->
+<div th:replace="script"></div>
+
+<script th:src="@{/js/calcScore.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<header class="main-header">
+    <!-- Logo -->
+    <a th:href="@{/}" class="logo">
+        <span class="logo-mini"><b>同济</b></span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b>复试成绩管理系统</b></span>
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <!-- User Account: style can be found in dropdown.less -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-user"></span> &nbsp;<span sec:authentication="principal.fullname"></span> &nbsp;<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+	                    <li><a th:href="@{/users/password/form}"><span class="glyphicon glyphicon-lock"></span>修改密码</a></li>
+	                    <li class="divider"></li>
+	                    <li>
+		                    <!-- 超链接表单提交，CSRF开启的情况下要求 POST 提交 logout -->
+		                    <a href="javascript:document.logoutForm.submit();"><span class="glyphicon glyphicon-off"></span>注销</a>
+		                    <form name="logoutForm" th:action="@{/logout}" method="post" style="display:none"></form>
+		                </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+

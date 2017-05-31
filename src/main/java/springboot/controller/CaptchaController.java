@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import springboot.utils.GifCaptcha;
+import springboot.util.GifCaptcha;
 
 /**
  * Created with IntelliJ IDEA.
