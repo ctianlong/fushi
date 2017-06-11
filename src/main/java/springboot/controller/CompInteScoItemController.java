@@ -3,7 +3,9 @@ package springboot.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -55,7 +57,9 @@ public class CompInteScoItemController {
 		if (SecurityUtil.getCurrentUser().getAgreed().equals(false)) {
 			return "redirect:/403";
 		}
+		// 下述两种方式都会产生一条额外的通过userID查询User的sql语句，不解。
 		model.addAttribute("list", itemRepository.findWithStudentByTeacherIsCurrentUser());
+//		model.addAttribute("list", itemRepository.findAllWithStudentByTeacherId(SecurityUtil.getCurrentUid()));
 		return "comp-inte-sco-item/teacher/list";
 	}
 	
@@ -226,11 +230,59 @@ public class CompInteScoItemController {
 		students.parallelStream()
 			.flatMap((s) -> {
 				Byte groupNo = s.getGroupNo();
+				// 考虑还未分配组号的情况
+				if (groupNo == null) {
+//					return Stream.<CompInteScoItem>of();
+					return null;
+				}
 				return teachers.parallelStream()
-					.filter((t) -> t.getGroupNo().equals(groupNo))
+					.filter((t) -> groupNo.equals(t.getGroupNo()))
 					.map((t) -> new CompInteScoItem(t, s));
 			})
 			.forEach(itemRepository::save);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	@PostMapping("/manager/comp-inte-sco-items/initPart")
+	@ResponseBody
+	public ResponseEntity<?> initPartItems() {
+		List<User> teachers = userRepository.findAllByRolesName(RoleConstants.USER);
+		List<Student> students = studentRepository.findAll();
+		List<CompInteScoItem> oldItems = itemRepository.findAll();
+		
+		List<CompInteScoItem> targetItems = students.parallelStream()
+			.flatMap((s) -> {
+				Byte groupNo = s.getGroupNo();
+				// 考虑还未分配组号的情况
+				if (groupNo == null) {
+//					return Stream.<CompInteScoItem>of();
+					return null;
+				}
+				return teachers.parallelStream()
+						.filter((t) -> groupNo.equals(t.getGroupNo()))
+						.map((t) -> new CompInteScoItem(t, s));
+			}).collect(Collectors.toList());
+		
+		List<CompInteScoItem> deleteItems = oldItems.parallelStream()
+			.filter((oi) -> 
+				targetItems.parallelStream()
+					.noneMatch((ti) -> 
+						oi.getStudent().getId().equals(ti.getStudent().getId()) && oi.getTeacher().getId().equals(ti.getTeacher().getId())
+					)
+			).collect(Collectors.toList());
+		
+		List<CompInteScoItem> addItems = targetItems.parallelStream()
+			.filter((ti) -> 
+				oldItems.parallelStream()
+					.noneMatch((oi) -> 
+						oi.getStudent().getId().equals(ti.getStudent().getId()) && oi.getTeacher().getId().equals(ti.getTeacher().getId())
+					)
+			).collect(Collectors.toList());
+		
+		itemRepository.deleteInBatch(deleteItems);
+		itemRepository.save(addItems);
+		itemRepository.flush();
 		
 		return ResponseEntity.ok().build();
 	}
@@ -249,6 +301,10 @@ public class CompInteScoItemController {
 					.compInteScoSum((short) (i.getCompInteSco1() + i.getCompInteSco2() + i.getCompInteSco3() + i.getCompInteSco4() + i.getCompInteSco5()));
 			});
 		itemRepository.flush();
+		
+		List<Student> students = studentRepository.findAllWithItems();
+		students.parallelStream().forEach(ScoreUtil::CalculateOne);
+		studentRepository.flush();
 		
 		return ResponseEntity.ok().build();
 	}

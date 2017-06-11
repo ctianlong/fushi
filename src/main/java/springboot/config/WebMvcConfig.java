@@ -12,7 +12,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new NavMenuActiveInterceptor()).excludePathPatterns("/teacher/**");
+		registry.addInterceptor(new NavMenuActiveInterceptor()).excludePathPatterns("/teacher/**", "/", "/login");
 	}
 	
 	@Override
@@ -20,7 +20,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 		registry.addViewController("/").setViewName("index");
 		registry.addViewController("/login").setViewName("login");
 		//映射 /error 到 error已经在springboot的BasicErrorController中完成
-//		registry.addViewController("/error").setViewName("error");
+		registry.addViewController("/error").setViewName("error");
 		
 		//以下映射只需添加对应位置实际页面，映射过程springboot已经完成
 		registry.addViewController("/403").setViewName("error/403");

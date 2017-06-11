@@ -32,8 +32,11 @@
                </div>
             </div>
             <div class="box-footer">
-               <button type="button" name="initAllItems" th:data="@{/manager/comp-inte-sco-items/initAll}" class="btn btn-danger">初始化打分记录</button>
-               <button type="button" name="randomItemScore" th:data="@{/manager/comp-inte-sco-items/randomScore}" class="btn btn-danger">随机打分测试</button>
+               <button type="button" name="initAllItems" th:data="@{/manager/comp-inte-sco-items/initAll}" class="btn btn-danger btn-sm">初始化打分单</button>
+               <button type="button" name="initPartItems" th:data="@{/manager/comp-inte-sco-items/initPart}" class="btn btn-danger btn-sm">调整打分单</button>
+               <button name="generateAll" th:data="@{/students/score/generateAll}" type="button" class="btn btn-danger btn-sm">计算成绩</button>
+               <br/><br/>
+               <button type="button" name="randomItemScore" th:data="@{/manager/comp-inte-sco-items/randomScore}" class="btn btn-danger btn-sm">随机打分测试</button>
             </div>
             <!-- /.box-footer-->
             <!-- Loading (remove the following to stop the loading)-->
@@ -83,7 +86,7 @@
     $(function(){
     	
     	$("button[name='initAllItems']").click(function () {
-            if(confirm("确认初始化打分记录?(将删除所有打分记录并初始化)")){
+            if(confirm("确认初始化打分单?(删除原有打分记录并重新生成打分单)")){
                 $.ajax({
                     type:"post",
                     url:$(this).attr("data"),
@@ -91,20 +94,41 @@
                         $(".overlay").show();
                     },
                     success:function (data, textStatus, jqXHR) {
-                        alert("初始化打分记录成功！");
+                        alert("初始化成功！");
                     },
                     error:function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert("初始化打分记录失败！");
+                        alert("初始化失败！");
                     },
                     complete:function(){
-                        $(".overlay").remove();
+                        $(".overlay").hide();
+                    }
+                })
+            }
+        });
+    	
+    	$("button[name='initPartItems']").click(function () {
+            if(confirm("确认调整打分单?(保留原有打分记录并调整打分单)")){
+                $.ajax({
+                    type:"post",
+                    url:$(this).attr("data"),
+                    beforeSend:function(){
+                        $(".overlay").show();
+                    },
+                    success:function (data, textStatus, jqXHR) {
+                        alert("调整成功！");
+                    },
+                    error:function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("调整失败！");
+                    },
+                    complete:function(){
+                        $(".overlay").hide();
                     }
                 })
             }
         });
     	
     	$("button[name='randomItemScore']").click(function () {
-            if(confirm("确认随机打分测试？(将随机生成分数)")){
+            if(confirm("确认随机打分测试？(随机生成分数)")){
                 $.ajax({
                     type:"post",
                     url:$(this).attr("data"),
@@ -118,7 +142,7 @@
                         alert("随机打分失败！");
                     },
                     complete:function(){
-                        $(".overlay").remove();
+                        $(".overlay").hide();
                     }
                 })
             }
@@ -136,6 +160,29 @@
                 }
     		});
     	});
+    	
+    	$("button[name='generateAll']").click(function () {
+            if(confirm("确认进行成绩计算？")){
+                $.ajax({
+                    type:"post",
+                    url:$(this).attr("data"),
+                    beforeSend:function(){
+                        $(".overlay").show();
+                    },
+                    success:function (data, textStatus, jqXHR) {
+                        alert("计算完成！");
+                        window.location.reload();
+                    },
+                    error:function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("计算失败！");
+                    },
+                    complete:function(){
+                        $(".overlay").hide();
+                    }
+                })
+            }
+        });
+    	
     });
 
 </script>

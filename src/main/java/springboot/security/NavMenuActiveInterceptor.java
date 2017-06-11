@@ -27,7 +27,7 @@ public class NavMenuActiveInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     	if (SecurityUtil.isCurrentUserInRole(RoleConstants.ADMIN)) {
     		String currentUrl=request.getServletPath();
-    		MENU_URLS.stream().filter((s) -> currentUrl.startsWith(s))
+    		MENU_URLS.parallelStream().filter((s) -> currentUrl.startsWith(s))
     			.findFirst().ifPresent((s) -> request.setAttribute("currentMenu", s));
     	}
         return super.preHandle(request, response, handler);

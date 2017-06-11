@@ -1,6 +1,7 @@
 package springboot;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -57,5 +58,21 @@ public class MainTest {
 		Set<String> set = new HashSet<>();
 		System.out.println(set.size());
 		System.out.println(set.stream().map(s -> s.toUpperCase()).collect(Collectors.toSet()));
+	}
+	
+	@Test
+	public void testStringBuilder() {
+		StringBuilder sb = new StringBuilder("1,");
+		System.out.println(sb.length());
+		System.out.println(sb.deleteCharAt(sb.length() - 1).toString());
+	}
+	
+	@Test
+	public void testDouble() {
+		double d = 18817878571D;
+		System.out.println(d);
+		System.out.println(String.valueOf(d));
+		System.out.println(String.format("%.0f", d));
+		System.out.println(new DecimalFormat("#").format(d));
 	}
 }

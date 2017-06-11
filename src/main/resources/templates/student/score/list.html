@@ -31,8 +31,11 @@
                         	<h3 class="box-title">考生列表</h3>
                         	<div class="box-tools pull-right">
 	                            <button name="generateAll" th:data="@{/students/score/generateAll}" type="button" class="btn btn-success btn-sm">
-	                            	<span class="glyphicon glyphicon-play"></span>&nbsp;计算
+	                            	<span class="glyphicon glyphicon-play"></span>&nbsp;计算成绩
 	                            </button>
+	                            <a th:href="@{/students/score/exportExcel}" class="btn btn-danger btn-sm">
+	                            	<span class="glyphicon glyphicon-export"></span>&nbsp;导出Excel
+	                            </a>
                             </div><!-- /.box-tools -->
                         </div>
 
@@ -107,7 +110,7 @@
 <script>
     $(function () {
         $('#dataTable').DataTable({
-            "paging": true,
+        	"paging": true,
             "lengthChange": true,
             "searching": true,
             "ordering": true,
@@ -138,7 +141,7 @@
 	                    alert("计算失败！");
 	                },
 	                complete:function(){
-	                	$(".overlay").remove();
+	                	$(".overlay").hide();
 	                }
 	            })
         	}
