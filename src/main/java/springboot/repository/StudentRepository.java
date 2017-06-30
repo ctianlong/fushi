@@ -22,4 +22,7 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
 	@EntityGraph(attributePaths = "items")
 	Student findOneWithItemsById(Long id);
 
+	@EntityGraph(attributePaths = "items")
+	List<Student> findAllWithItemsByGroupNo(Byte groupNo);
+
 }

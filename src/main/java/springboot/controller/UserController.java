@@ -55,11 +55,13 @@ import springboot.domain.User;
 import springboot.errors.Message;
 import springboot.repository.CompInteScoItemRepository;
 import springboot.repository.RoleRepository;
+import springboot.repository.StudentRepository;
 import springboot.repository.UserRepository;
 import springboot.rest.vm.UserVM;
 import springboot.security.RoleConstants;
 import springboot.security.SecurityUser;
 import springboot.security.SecurityUtil;
+import springboot.util.ScoreUtil;
 
 @Controller
 @RequestMapping("/users")
@@ -69,15 +71,19 @@ public class UserController {
 	
 	private final RoleRepository roleRepository;
 	
+	private final StudentRepository studentRepository;
+	
 	private final PasswordEncoder passwordEncoder;
 	
 	private final CompInteScoItemRepository itemRepository;
 	
-	public UserController(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, CompInteScoItemRepository itemRepository){
+	public UserController(UserRepository userRepository, RoleRepository roleRepository,
+			PasswordEncoder passwordEncoder, CompInteScoItemRepository itemRepository, StudentRepository studentRepository){
 		this.userRepository = userRepository;
 		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.itemRepository = itemRepository;
+		this.studentRepository = studentRepository;
 	}
 	
 	@GetMapping
@@ -149,7 +155,13 @@ public class UserController {
 	@ResponseBody
 	public ResponseEntity<?> deleteUser(@PathVariable Long id) {
 		try {
-			userRepository.delete(id);
+			List<CompInteScoItem> deleteItems = itemRepository.findAllByTeacherId(id);
+			itemRepository.delete(deleteItems);
+			User teacher = userRepository.findOne(id);
+			List<Student> students = studentRepository.findAllWithItemsByGroupNo(teacher.getGroupNo());
+			students.parallelStream().forEach(ScoreUtil::CalculateOne);
+			studentRepository.flush();
+			userRepository.delete(teacher);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().header("X-app-error", "user.delete.error")

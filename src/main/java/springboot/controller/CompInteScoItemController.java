@@ -241,6 +241,18 @@ public class CompInteScoItemController {
 			})
 			.forEach(itemRepository::save);
 		
+		students.parallelStream().forEach((s) -> {
+			s.compInteSco1(null)
+				.compInteSco2(null)
+				.compInteSco3(null)
+				.compInteSco4(null)
+				.compInteSco5(null)
+				.compInteTotScore(null)
+				.oriTotScore(null)
+				.lasTotScore(null);
+		});
+		studentRepository.flush();
+		
 		return ResponseEntity.ok().build();
 	}
 	
