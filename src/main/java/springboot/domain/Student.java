@@ -32,30 +32,30 @@ public class Student implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 2, max = 10)
+    @Size(min = 1, max = 10)
     @Column(name = "fullname", length = 10, nullable = false)
     private String fullname;
     
     @Column(name = "group_no")
     private Byte groupNo;
     
-    @Size(min = 1, max = 20)
+    @Size(max = 20)
     @Column(name = "graduated_college", length = 20)
     private String graduatedCollege;
     
-    @Size(min = 1, max = 20)
+    @Size(max = 20)
     @Column(name = "telephone", length = 20)
     private String telephone;
     
-    @Size(min = 1, max = 10)
+    @Size(max = 10)
     @Column(name = "first_tutor", length = 10)
     private String firstTutor;
     
-    @Size(min = 1, max = 10)
+    @Size(max = 10)
     @Column(name = "second_tutor", length = 10)
     private String secondTutor;
     
-    @Size(min = 1, max = 50)
+    @Size(max = 50)
     @Column(name = "home_address", length = 50)
     private String homeAddress;
 
@@ -74,9 +74,13 @@ public class Student implements Serializable {
     @Column(name = "eng_spe_score")
     private Byte engSpeScore;
 
+    @Min(value = 0)
+    @Max(value = 30)
     @Column(name = "comp_inte_sco_1", precision = 4, scale = 2)
     private BigDecimal compInteSco1;
 
+    @Min(value = 0)
+    @Max(value = 30)
     @Column(name = "comp_inte_sco_2", precision = 4, scale = 2)
     private BigDecimal compInteSco2;
 

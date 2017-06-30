@@ -57,10 +57,10 @@ public class CompInteScoItem implements Serializable {
     @Column(name = "comp_inte_sco_sum")
     private Short compInteScoSum;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User teacher;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Student student;
     
     public CompInteScoItem() {

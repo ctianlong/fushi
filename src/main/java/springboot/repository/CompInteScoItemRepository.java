@@ -31,4 +31,6 @@ public interface CompInteScoItemRepository extends JpaRepository<CompInteScoItem
     
     List<CompInteScoItem> findAllByTeacherId(Long id);
 
+	List<CompInteScoItem> findAllByStudentId(Long id);
+
 }

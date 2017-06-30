@@ -284,6 +284,10 @@ public class CompInteScoItemController {
 		itemRepository.save(addItems);
 		itemRepository.flush();
 		
+		List<Student> newStudents = studentRepository.findAllWithItems();
+		newStudents.parallelStream().forEach(ScoreUtil::CalculateOne);
+		studentRepository.flush();
+		
 		return ResponseEntity.ok().build();
 	}
 	
@@ -293,17 +297,22 @@ public class CompInteScoItemController {
 		
 		itemRepository.findAll().parallelStream()
 			.forEach((i) -> {
-				i.compInteSco1((byte) RandomUtil.num(31))
-					.compInteSco2((byte) RandomUtil.num(31))
-					.compInteSco3((byte) RandomUtil.num(31))
-					.compInteSco4((byte) RandomUtil.num(31))
-					.compInteSco5((byte) RandomUtil.num(31))
+				i.compInteSco1((byte) RandomUtil.num(18, 30))
+					.compInteSco2((byte) RandomUtil.num(18, 30))
+					.compInteSco3((byte) RandomUtil.num(18, 30))
+					.compInteSco4((byte) RandomUtil.num(18, 30))
+					.compInteSco5((byte) RandomUtil.num(18, 30))
 					.compInteScoSum((short) (i.getCompInteSco1() + i.getCompInteSco2() + i.getCompInteSco3() + i.getCompInteSco4() + i.getCompInteSco5()));
 			});
 		itemRepository.flush();
 		
 		List<Student> students = studentRepository.findAllWithItems();
-		students.parallelStream().forEach(ScoreUtil::CalculateOne);
+		students.parallelStream().forEach((s) -> {
+			s.proClaScore((byte) RandomUtil.num(60, 100))
+				.engSpeScore((byte) RandomUtil.num(30, 50))
+				.engWirScore((byte) RandomUtil.num(30, 50));
+			ScoreUtil.CalculateOne(s);
+		});
 		studentRepository.flush();
 		
 		return ResponseEntity.ok().build();

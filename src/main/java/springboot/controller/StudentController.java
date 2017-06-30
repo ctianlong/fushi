@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import springboot.domain.CompInteScoItem;
 import springboot.domain.Student;
 import springboot.errors.Message;
 import springboot.repository.CompInteScoItemRepository;
@@ -136,6 +137,8 @@ public class StudentController {
 	@ResponseBody
 	public ResponseEntity<?> deleteStudent(@PathVariable Long id){
 		try {
+			List<CompInteScoItem> deleteItems = itemRepository.findAllByStudentId(id);
+			itemRepository.delete(deleteItems);
 			studentRepository.delete(id);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -255,24 +258,60 @@ public class StudentController {
 			for (int i = 0; i < StuNum; i++){
 				Student s = students.get(i);
 				row = sheet.createRow(i + 1);
-				row.createCell(0).setCellValue(s.getFullname());
-				row.createCell(1).setCellValue(s.getGroupNo());
-				row.createCell(2).setCellValue(s.getGraduatedCollege());
-				row.createCell(3).setCellValue(s.getTelephone());
-				row.createCell(4).setCellValue(s.getHomeAddress());
-				row.createCell(5).setCellValue(s.getFirstTutor());
-				row.createCell(6).setCellValue(s.getSecondTutor());
-				row.createCell(7).setCellValue(s.getProClaScore());
-				row.createCell(8).setCellValue(s.getEngWirScore());
-				row.createCell(9).setCellValue(s.getEngSpeScore());
-				row.createCell(10).setCellValue(s.getCompInteSco1().doubleValue());
-				row.createCell(11).setCellValue(s.getCompInteSco2().doubleValue());
-				row.createCell(12).setCellValue(s.getCompInteSco3().doubleValue());
-				row.createCell(13).setCellValue(s.getCompInteSco4().doubleValue());
-				row.createCell(14).setCellValue(s.getCompInteSco5().doubleValue());
-				row.createCell(15).setCellValue(s.getCompInteTotScore().doubleValue());
-				row.createCell(16).setCellValue(s.getOriTotScore().doubleValue());
-				row.createCell(17).setCellValue(s.getLasTotScore().doubleValue());
+				if (s.getFullname() != null) {
+					row.createCell(0).setCellValue(s.getFullname());
+				}
+				if (s.getGroupNo() != null) {
+					row.createCell(1).setCellValue(s.getGroupNo());
+				}
+				if (s.getGraduatedCollege() != null) {
+					row.createCell(2).setCellValue(s.getGraduatedCollege());
+				}
+				if (s.getTelephone() != null) {
+					row.createCell(3).setCellValue(s.getTelephone());
+				}
+				if (s.getHomeAddress() != null) {
+					row.createCell(4).setCellValue(s.getHomeAddress());
+				}
+				if (s.getFirstTutor() != null) {
+					row.createCell(5).setCellValue(s.getFirstTutor());
+				}
+				if (s.getSecondTutor() != null) {
+					row.createCell(6).setCellValue(s.getSecondTutor());
+				}
+				if (s.getProClaScore() != null) {
+					row.createCell(7).setCellValue(s.getProClaScore());
+				}
+				if (s.getEngWirScore() != null) {
+					row.createCell(8).setCellValue(s.getEngWirScore());
+				}
+				if (s.getEngSpeScore() != null) {
+					row.createCell(9).setCellValue(s.getEngSpeScore());
+				}
+				if (s.getCompInteSco1() != null) {
+					row.createCell(10).setCellValue(s.getCompInteSco1().doubleValue());
+				}
+				if (s.getCompInteSco2() != null) {
+					row.createCell(11).setCellValue(s.getCompInteSco2().doubleValue());
+				}
+				if (s.getCompInteSco3() != null) {
+					row.createCell(12).setCellValue(s.getCompInteSco3().doubleValue());
+				}
+				if (s.getCompInteSco4() != null) {
+					row.createCell(13).setCellValue(s.getCompInteSco4().doubleValue());
+				}
+				if (s.getCompInteSco5() != null) {
+					row.createCell(14).setCellValue(s.getCompInteSco5().doubleValue());
+				}
+				if (s.getCompInteTotScore() != null) {
+					row.createCell(15).setCellValue(s.getCompInteTotScore().doubleValue());
+				}
+				if (s.getOriTotScore() != null) {
+					row.createCell(16).setCellValue(s.getOriTotScore().doubleValue());
+				}
+				if (s.getLasTotScore() != null) {
+					row.createCell(17).setCellValue(s.getLasTotScore().doubleValue());
+				}
 			}
 			
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
